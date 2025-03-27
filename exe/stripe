@@ -1,0 +1,12 @@
+#! /usr/bin/env ruby
+# because rubygems shims assume a gem's executables are Ruby
+
+require "ruby-stripe-cli"
+
+begin
+  command = [StripeCLI.executable, *ARGV]
+  exec(*command)
+rescue StripeCLI::UnsupportedPlatformException, StripeCLI::ExecutableNotFoundException => e
+  STDERR.puts("ERROR: " + e.message)
+  exit 1
+end
