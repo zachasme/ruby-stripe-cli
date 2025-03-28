@@ -4,7 +4,7 @@
 require "ruby-stripe-cli"
 
 begin
-  command = [StripeCLI.executable, *ARGV]
+  command = [ StripeCLI.executable, *ARGV ]
   exec(*command)
 rescue StripeCLI::UnsupportedPlatformException, StripeCLI::ExecutableNotFoundException => e
   STDERR.puts("ERROR: " + e.message)

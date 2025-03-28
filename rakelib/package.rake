@@ -1,4 +1,5 @@
 # coding: utf-8
+
 #
 #  Rake tasks to manage native gem packages with binary executables from stripe/stripe-cli
 #
@@ -39,7 +40,7 @@
 #  - pkg/stripe-cli-bin-1.0.0-x64-mingw-ucrt.gem
 #  - pkg/stripe-cli-bin-1.0.0-x86_64-darwin.gem
 #  - pkg/stripe-cli-bin-1.0.0-x86_64-linux.gem
-# 
+#
 #  Note that in addition to the native gems, a vanilla "ruby" gem will also be created without
 #  either the `exe/stripe` script or a binary executable present.
 #
@@ -75,11 +76,11 @@ end
 STRIPECLI_GEMSPEC = Bundler.load_gemspec("ruby-stripe-cli.gemspec")
 
 # prepend the download task before the Gem::PackageTask tasks
-task :package => :download
+task package: :download
 
 gem_path = Gem::PackageTask.new(STRIPECLI_GEMSPEC).define
 desc "Build the ruby gem"
-task "gem:ruby" => [gem_path]
+task "gem:ruby" => [ gem_path ]
 
 exepaths = []
 StripeCLI::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
@@ -90,15 +91,15 @@ StripeCLI::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
 
     # modify a copy of the gemspec to include the native executable
     gemspec.platform = platform
-    gemspec.files += [exepath, "LICENSE-DEPENDENCIES"]
+    gemspec.files += [ exepath, "LICENSE-DEPENDENCIES" ]
 
     # create a package task
     gem_path = Gem::PackageTask.new(gemspec).define
     desc "Build the #{platform} gem"
-    task "gem:#{platform}" => [gem_path]
+    task "gem:#{platform}" => [ gem_path ]
 
     directory exedir
-    file exepath => [exedir] do
+    file exepath => [ exedir ] do
       release_url = stripe_cli_download_url(filename)
       warn "Downloading #{exepath} from #{release_url} ..."
 
