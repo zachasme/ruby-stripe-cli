@@ -3,7 +3,6 @@
 require_relative "stripe_cli/signing_secret"
 require_relative "stripe_cli/upstream"
 require_relative "stripe_cli/version"
-require_relative "stripe_cli/puma/plugin"
 
 module StripeCLI
   DEFAULT_DIR = File.expand_path(File.join(__dir__, "..", "exe"))
