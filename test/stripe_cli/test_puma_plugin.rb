@@ -41,6 +41,8 @@ class StripeCLI::TestPumaPlugin < Minitest::Test
   end
 
   def test_registration
+    skip "Skipping because Stripe.api_key is not present" unless ENV.key? "TEST_STRIPE_API_KEY"
+
     `#{StripeCLI.executable} --api-key #{Stripe.api_key} trigger customer.created`
     sleep 2
     assert @called

@@ -27,7 +27,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 gem install ruby-stripe-cli
 ```
 
-## Forwaring events to your web server
+## Forwarding events to your web server
 
 Make sure `Stripe.api_key` is set, e.g. in `config/initializers/stripe.rb`:
 
