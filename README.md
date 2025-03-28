@@ -6,7 +6,18 @@ The binary distribution part is lifted from https://github.com/flavorjones/tailw
 
 ## Installation
 
-```bash
+This gem wraps the [Stripe CLI executable](https://github.com/stripe/stripe-cli). These executables are platform specific, so there are actually separate underlying gems per platform, but the correct gem will automatically be picked for your platform.
+
+Supported platforms are:
+
+- `arm64-darwin` (macos-arm64)
+- `x86_64-darwin` (macos-x64)
+- `x86_64-linux` (linux-x64)
+- `arm-linux` (linux-armv7)
+
+Install the gem and add to the application's Gemfile by executing:
+
+```
 bundle add ruby-stripe-cli --group development
 ```
 
@@ -69,7 +80,7 @@ end
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `ruby-stripe-cli.gemspec`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `ruby-stripe-cli.gemspec`, and then run `bin/cut`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` files to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
