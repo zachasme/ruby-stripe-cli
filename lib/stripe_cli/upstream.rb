@@ -1,7 +1,7 @@
 module StripeCLI
   # constants describing the upstream tailwindcss project
   module Upstream
-    VERSION = "1.25.1"
+    VERSION = "1.26.1"
 
     # rubygems platform name => upstream release filename
     NATIVE_PLATFORMS = {
