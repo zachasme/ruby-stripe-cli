@@ -76,6 +76,10 @@ By default, events will be forwarded to `/stripe_events`, this can be configured
 You can grab your *signing secret* using `StripeCLI.signing_secret`. For example:
 
 ```ruby
+# config/environments/development.rb
+config.stripe_signing_secret = StripeCLI.signing_secret(Stripe.api_key)
+
+# app/constrollers/stripe_events_controller.rb
 class StripeEventsController < ActionController::API
   before_action :set_event
 
@@ -95,14 +99,13 @@ class StripeEventsController < ActionController::API
       @event ||= Stripe::Webhook.construct_event(
         request.body.read,
         request.headers["stripe-signature"],
-        StripeCLI.signing_secret(Stripe.api_key)
+        Rails.configuration.stripe_signing_secret
       )
     rescue => error
       logger.error error
       head :bad_request
     end
 end
-
 ```
 
 ## Development
