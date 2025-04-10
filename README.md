@@ -27,6 +27,35 @@ If bundler is not being used to manage dependencies, install the gem by executin
 gem install stripe-cli-ruby
 ```
 
+> [!NOTE]
+> Add the [included puma plugin](#forwarding-events-to-your-web-server) in order to listen for webhook events in development.
+
+## Usage
+
+### Ruby
+
+The gem makes available `StripeCLI.executable` which is the path to the vendored standalone executable.
+
+```ruby
+require "stripe-cli-ruby"
+StripeCLI.executable
+# => "/path/to/installs/ruby/3.3.5/lib/ruby/gems/3.3.0/gems/stripe-cli-ruby-0.1.0-x86_64-linux/exe/x86_64-linux/stripe"
+```
+
+### Command line
+
+This gem provides an executable `stripe` shim that will run the vendored standalone executable.
+
+```bash
+# where is the shim?
+$ bundle exec which stripe
+/path/to/installs/ruby/3.3/bin/stripe
+
+# run the actual executable through the shim
+$ bundle exec stripe --help
+stripe version 1.25.1
+```
+
 ## Forwarding events to your web server
 
 Make sure `Stripe.api_key` is set, e.g. in `config/initializers/stripe.rb`:
