@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-stripe-cli (0.1.0)
+    stripe-cli-ruby (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -94,8 +94,8 @@ DEPENDENCIES
   rake (~> 13.0)
   rubocop (~> 1.21)
   rubocop-rails-omakase
-  ruby-stripe-cli!
   stripe
+  stripe-cli-ruby!
 
 BUNDLED WITH
    2.6.3

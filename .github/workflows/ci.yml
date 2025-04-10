@@ -72,7 +72,7 @@ jobs:
         with:
           name: gem-ruby
           path: pkg
-      - run: "gem install pkg/ruby-stripe-cli-*.gem"
+      - run: "gem install pkg/stripe-cli-ruby-*.gem"
       - run: "stripe 2>&1 | fgrep 'ERROR: Cannot find the stripe cli executable'"
 
   install-native:
@@ -103,7 +103,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
       - if: ${{ matrix.runs_on }}
-        run: "gem install pkg/ruby-stripe-cli-*.gem"
+        run: "gem install pkg/stripe-cli-ruby-*.gem"
       - if: ${{ matrix.runs_on }}
         run: "stripe --help"
       - if: ${{ (! matrix.runs_on) && matrix.docker_platform }}
@@ -114,6 +114,6 @@ jobs:
             ${{ matrix.docker_platform }} ruby:${{ matrix.ruby }}${{ matrix.docker_tag }} \
             sh -c "
               ${{ matrix.bootstrap }}
-              gem install pkg/ruby-stripe-cli-*.gem
+              gem install pkg/stripe-cli-ruby-*.gem
               stripe --help
             "

@@ -73,7 +73,7 @@ def stripe_cli_download_url(filename)
   "https://github.com/stripe/stripe-cli/releases/download/v#{StripeCLI::Upstream::VERSION}/#{filename}"
 end
 
-STRIPECLI_GEMSPEC = Bundler.load_gemspec("ruby-stripe-cli.gemspec")
+STRIPECLI_GEMSPEC = Bundler.load_gemspec("stripe-cli-ruby.gemspec")
 
 # prepend the download task before the Gem::PackageTask tasks
 task package: :download

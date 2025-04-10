@@ -3,13 +3,13 @@
 require_relative "lib/stripe_cli/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "ruby-stripe-cli"
+  spec.name = "stripe-cli-ruby"
   spec.version = StripeCLI::VERSION
   spec.authors = [ "Zacharias Knudsen" ]
   spec.email = [ "z@chari.as" ]
 
   spec.summary = "A self-contained `stripe` executable."
-  spec.homepage = "https://github.com/zachasme/ruby-stripe-cli"
+  spec.homepage = "https://github.com/zachasme/stripe-cli-ruby"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
 

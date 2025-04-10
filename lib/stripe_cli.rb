@@ -6,7 +6,7 @@ require_relative "stripe_cli/version"
 
 module StripeCLI
   DEFAULT_DIR = File.expand_path(File.join(__dir__, "..", "exe"))
-  GEM_NAME = "ruby-stripe-cli"
+  GEM_NAME = "stripe-cli-ruby"
 
   # raised when the host platform is not supported by upstream stripe's binary releases
   class UnsupportedPlatformException < StandardError

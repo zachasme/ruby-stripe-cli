@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 # because rubygems shims assume a gem's executables are Ruby
 
-require "ruby-stripe-cli"
+require "stripe-cli-ruby"
 
 begin
   command = [ StripeCLI.executable, *ARGV ]

@@ -1,4 +1,4 @@
-# ruby-stripe-cli
+# stripe-cli-ruby
 
 A self-contained Stripe CLI executable, wrapped up in a ruby gem. Includes a puma plugin to forward Stripe webhook events to your web server.
 
@@ -18,13 +18,13 @@ Supported platforms are:
 Install the gem and add to the application's Gemfile by executing:
 
 ```
-bundle add ruby-stripe-cli --group development
+bundle add stripe-cli-ruby --group development
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```bash
-gem install ruby-stripe-cli
+gem install stripe-cli-ruby
 ```
 
 ## Forwarding events to your web server
@@ -80,11 +80,11 @@ end
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `ruby-stripe-cli.gemspec`, and then run `bin/cut`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` files to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `stripe-cli-ruby.gemspec`, and then run `bin/cut`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` files to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/zachasme/ruby-stripe-cli.
+Bug reports and pull requests are welcome on GitHub at https://github.com/zachasme/stripe-cli-ruby.
 
 ## License
 
