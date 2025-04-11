@@ -67,6 +67,7 @@
 #
 require "rubygems/package_task"
 require "open-uri"
+require "zlib"
 require_relative "../lib/stripe_cli/upstream"
 
 def stripe_cli_download_url(filename)
@@ -82,9 +83,30 @@ gem_path = Gem::PackageTask.new(STRIPECLI_GEMSPEC).define
 desc "Build the ruby gem"
 task "gem:ruby" => [ gem_path ]
 
+tmpdir = "tmp"
+directory tmpdir
+
+sumpath = File.join(tmpdir, "checksums.txt")
+file sumpath => [ tmpdir ] do
+  %w[ linux mac windows ].each do |platform|
+    checksums_url = stripe_cli_download_url("stripe-#{platform}-checksums.txt")
+    warn "Downloading checksums from #{checksums_url} ..."
+
+    File.open(sumpath, "a") do |local|
+      URI.open(checksums_url) do |remote|
+        local.write(remote.read)
+      end
+    end
+  end
+end
+
+tarpaths = []
 exepaths = []
 StripeCLI::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
   STRIPECLI_GEMSPEC.dup.tap do |gemspec|
+    tarpath = File.join(tmpdir, filename)
+    tarpaths << tarpath
+
     exedir = File.join(gemspec.bindir, platform) # "exe/x86_64-linux"
     exepath = File.join(exedir, "stripe") # "exe/x86_64-linux/stripe"
     exepaths << exepath
@@ -98,17 +120,37 @@ StripeCLI::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
     desc "Build the #{platform} gem"
     task "gem:#{platform}" => [ gem_path ]
 
-    directory exedir
-    file exepath => [ exedir ] do
+    file tarpath => [ tmpdir ] do
       release_url = stripe_cli_download_url(filename)
-      warn "Downloading #{exepath} from #{release_url} ..."
+      warn "Downloading #{tarpath} from #{release_url} ..."
 
-      # lazy, but fine for now.
       URI.open(release_url) do |remote|
-        # File.open(exepath, "wb") do |local|
-        #   local.write(remote.read)
-        # end
-        Zlib::GzipReader.wrap(remote) do |gz|
+        File.open(tarpath, "wb") do |local|
+          local.write(remote.read)
+        end
+      end
+    end
+
+    directory exedir
+    file exepath => [ tarpath, sumpath, exedir ] do
+      checksums = File.open(sumpath).each_line.map do |line|
+        checksum, file = line.split
+        [ File.basename(file), checksum ]
+      end.to_h
+
+      local_sha256 = Digest::SHA256.file(tarpath).hexdigest
+      remote_sha256 = checksums.fetch(filename)
+
+      if local_sha256 == remote_sha256
+        puts "Checksum OK for #{exepath} (#{local_sha256})"
+      else
+        abort "Checksum mismatch for #{exepath} (#{local_sha256} != #{remote_sha256})"
+      end
+
+      warn "Extracting #{tarpath} ..."
+
+      File.open(tarpath) do |tarball|
+        Zlib::GzipReader.wrap(tarball) do |gz|
           Gem::Package::TarReader.new(gz) do |reader|
             reader.seek("stripe") do |file|
               File.binwrite(exepath, file.read)
@@ -121,38 +163,8 @@ StripeCLI::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
   end
 end
 
-# desc "Validate checksums for stripe cli binaries"
-# task "check" => exepaths do
-#   sha_filename = File.absolute_path("../package/tailwindcss-#{StripeCLI::Upstream::VERSION}-checksums.txt", __dir__)
-#   sha_url = if File.exist?(sha_filename)
-#     sha_filename
-#   else
-#     sha_url = stripe_cli_download_url("sha256sums.txt")
-#   end
-#   gemspec = STRIPECLI_GEMSPEC
-
-#   checksums = URI.open(sha_url).each_line.map do |line|
-#     checksum, file = line.split
-#     [File.basename(file), checksum]
-#   end.to_h
-
-#   StripeCLI::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
-#     exedir = File.join(gemspec.bindir, platform) # "exe/x86_64-linux"
-#     exepath = File.join(exedir, "stripe") # "exe/x86_64-linux/stripe"
-
-#     local_sha256 = Digest::SHA256.file(exepath).hexdigest
-#     remote_sha256 = checksums.fetch(filename)
-
-#     if local_sha256 == remote_sha256
-#       puts "Checksum OK for #{exepath} (#{local_sha256})"
-#     else
-#       abort "Checksum mismatch for #{exepath} (#{local_sha256} != #{remote_sha256})"
-#     end
-#   end
-# end
-
-# desc "Download all stripe cli binaries"
-# task "download" => :check
+desc "Download all stripe cli binaries"
 task "download" => exepaths
 
+CLOBBER.add(tmpdir)
 CLOBBER.add(exepaths.map { |p| File.dirname(p) })
