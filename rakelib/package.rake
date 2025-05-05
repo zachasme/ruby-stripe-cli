@@ -86,7 +86,7 @@ task "gem:ruby" => [ gem_path ]
 tmpdir = "tmp"
 directory tmpdir
 
-sumpath = File.join(tmpdir, "checksums.txt")
+sumpath = File.join(tmpdir, "stripe_#{StripeCLI::Upstream::VERSION}_checksums.txt")
 file sumpath => [ tmpdir ] do
   %w[ linux mac windows ].each do |platform|
     checksums_url = stripe_cli_download_url("stripe-#{platform}-checksums.txt")
